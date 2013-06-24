@@ -3,12 +3,14 @@ package chat.kata
 class ChatController {
 
 	ChatService chatService
-	
+
+	//static constraints = {seq type:Integer}
 
 	def list(Integer seq) {
-		
+
 		if(hasErrors()){
 			log.error("Invalid seq: ${errors.getFieldError('seq').rejectedValue}")
+			render(status:400, contentType: "text/json") {error = "Invalid seq parameter"}
 		}
 		else{
 			List<ChatMessage> allMessages = new ArrayList()
@@ -26,8 +28,23 @@ class ChatController {
 		}
 	}
 
-	def send(ChatMessage msg){
-		chatService.putChatMessage(new ChatMessage(request.JSON))
-		render(status:201)
+	def send(){
+		if(!request.JSON)
+			render(status:400,contentType: "text/json") {error = "Invalid body"}
+
+		else{
+			ChatMessage msg = new ChatMessage(request.JSON)
+			
+			if(!msg.validate()){
+				if(msg.errors.hasFieldErrors("nick"))
+					render(status:400,contentType: "text/json") {error = "Missing nick parameter"}
+				if(msg.errors.hasFieldErrors("message"))
+					render(status:400,contentType: "text/json") {error = "Missing message parameter"}
+			}
+			else{
+				chatService.putChatMessage(msg)
+				render(status:201)
+			}
+		}
 	}
 }
