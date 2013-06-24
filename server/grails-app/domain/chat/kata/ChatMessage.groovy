@@ -20,5 +20,4 @@ class ChatMessage {
 		return nick+":"+message
 	}
 	
-	
 }
