@@ -4,8 +4,6 @@ class ChatController {
 
 	ChatService chatService
 
-	//static constraints = {seq type:Integer}
-
 	def list(Integer seq) {
 
 		if(hasErrors()){
