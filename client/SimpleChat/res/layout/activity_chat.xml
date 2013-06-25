@@ -1,20 +1,44 @@
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/AbsoluteLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ChatActivity" >
 
+    <FrameLayout
+        android:id="@+id/FrameLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btnExit"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:minHeight="30dip"
+            android:onClick="exit"
+            android:text="exit" />
+
+        <TextView
+            android:id="@+id/lblTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="Chat-Kata Room"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </FrameLayout>
+
     <EditText
-        android:id="@+id/editText1"
-        android:layout_width="302dp"
-        android:layout_height="294dp"
-        android:layout_x="9dp"
-        android:layout_y="49dp"
+        android:id="@+id/ipFiel"
+        android:layout_width="324dp"
+        android:layout_height="234dp"
+        android:layout_weight="0.39"
         android:ems="10"
         android:gravity="center_vertical|start|top"
         android:inputType="textMultiLine"
@@ -24,37 +48,18 @@
         <requestFocus />
     </EditText>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="22dp"
-        android:layout_y="14dp"
-        android:text="Chat-Kata Room"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <EditText
-        android:id="@+id/editText2"
-        android:layout_width="302dp"
+        android:id="@+id/userInput"
+        android:layout_width="324dp"
         android:layout_height="wrap_content"
-        android:layout_x="13dp"
-        android:layout_y="379dp"
-        android:ems="10" />
+        android:ems="10"
+        android:hint="user&apos;s nick" />
 
     <Button
-        android:id="@+id/btnJoin"
+        android:id="@+id/btnSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="30dp"
-        android:layout_y="452dp"
-        android:text="Button" />
+        android:layout_gravity="right"
+        android:text="Send" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="167dp"
-        android:layout_y="452dp"
-        android:text="Button" />
-
-</AbsoluteLayout>
+</LinearLayout>

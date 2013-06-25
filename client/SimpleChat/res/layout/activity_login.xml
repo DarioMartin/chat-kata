@@ -16,6 +16,7 @@
         android:layout_below="@+id/nickField"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="36dp"
+        android:onClick="join"
         android:text="Join" />
 
     <EditText
@@ -34,15 +35,14 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
         android:text="IP Servidor"
         android:textSize="11sp" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/lblTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
+        android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="140dp"
         android:text="Chat-Kata"
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/nickField"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/lblTitle"
         android:layout_marginTop="31dp"
         android:text="Nick:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -63,8 +63,8 @@
         android:id="@+id/editText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView2"
-        android:layout_toRightOf="@+id/btnJoin"
         android:ems="10"
         android:textSize="11sp" />
 

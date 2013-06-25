@@ -1,7 +1,5 @@
 package org.ejmc.android.simplechat;
 
-
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * Main activity.
@@ -21,29 +20,24 @@ import android.widget.Button;
  */
 public class LoginActivity extends Activity {
 
+	private TextView nick, ipServer;
+	private Button btnJoin;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		Button joinBtn = (Button) findViewById(R.id.btnJoin);
-		
-		// String nick = (String)
-		// findViewById(R.id.nickField)joinBtn.toString();
+		btnJoin = (Button) findViewById(R.id.btnJoin);
+		nick = (TextView) findViewById(R.id.nickField);
+		ipServer = (TextView) findViewById(R.id.ipFiel);
 
-		joinBtn.setOnClickListener(new OnClickListener() {
-			// @Override
-			public void onClick(View v) {
-				Intent intent = new Intent(LoginActivity.this,ChatActivity.class);
-		startActivity(intent);
-			}
-		});
-
-		SharedPreferences settings = getSharedPreferences("perfil",
+		/*SharedPreferences settings = getSharedPreferences("perfil",
 				MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
-		// editor.putString("user",nameText);
-		editor.commit();
+		editor.putString("nick", nick.getText().toString());
+		editor.commit();*/
+
 	}
 
 	@Override
@@ -51,6 +45,13 @@ public class LoginActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.login, menu);
 		return true;
+	}
+
+	public void join(View v) {
+		Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+		intent.putExtra("nick", nick.getText().toString());
+		intent.putExtra("ipServer", ipServer.getText().toString());
+		startActivity(intent);
 	}
 
 }
