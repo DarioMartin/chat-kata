@@ -26,8 +26,8 @@ class ChatService {
 
 		wl.lock()
 		try{
-			for(Integer i=init; i<listSize; i++)
-				collector.add(messages.get(i))
+			for(msg in messages.subList(init,listSize))
+				collector.add(msg)
 		}finally{
 			wl.unlock()
 		}

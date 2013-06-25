@@ -27,12 +27,12 @@ class ChatController {
 	}
 
 	def send(){
-		if(!request.JSON)
+		if(!request.JSON){
 			render(status:400,contentType: "text/json") {error = "Invalid body"}
-
+		}
 		else{
 			ChatMessage msg = new ChatMessage(request.JSON)
-			
+
 			if(!msg.validate()){
 				if(msg.errors.hasFieldErrors("nick"))
 					render(status:400,contentType: "text/json") {error = "Missing nick parameter"}
