@@ -7,7 +7,7 @@ import org.hibernate.loader.custom.Return;
 
 class ChatService {
 
-	private List<ChatMessage> messages = new ArrayList()
+	final List<ChatMessage> messages = new ArrayList()
 	private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock()
 	private Lock wl = rwl.writeLock()
 	private Lock rl = rwl.readLock()
@@ -25,9 +25,12 @@ class ChatService {
 		Integer listSize = messages.size()
 
 		wl.lock()
-		for(Integer i=init; i<listSize; i++)
-			collector.add(messages.get(i))
-		wl.unlock()
+		try{
+			for(Integer i=init; i<listSize; i++)
+				collector.add(messages.get(i))
+		}finally{
+			wl.unlock()
+		}
 
 		return listSize-1
 	}
@@ -39,12 +42,10 @@ class ChatService {
 	 */
 	void putChatMessage(ChatMessage message){
 		wl.lock()
-		rl.lock()
 		try{
 			messages.add(message)
 		}finally{
 			wl.unlock()
-			rl.unlock()
 		}
 	}
 }
