@@ -30,7 +30,7 @@ public class LoginActivity extends Activity {
 
 		btnJoin = (Button) findViewById(R.id.btnJoin);
 		nick = (TextView) findViewById(R.id.nickField);
-		ipServer = (TextView) findViewById(R.id.ipFiel);
+		ipServer = (TextView) findViewById(R.id.ipField);
 
 		/*SharedPreferences settings = getSharedPreferences("perfil",
 				MODE_PRIVATE);
