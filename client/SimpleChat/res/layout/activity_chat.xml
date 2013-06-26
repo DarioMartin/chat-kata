@@ -30,7 +30,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:text="Chat-Kata Room"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
+
     </FrameLayout>
 
     <ListView

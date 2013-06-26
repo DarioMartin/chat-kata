@@ -62,6 +62,7 @@ public class ChatActivity extends Activity {
 		handler = new NetResponseHandler<ChatList>();
 		handler2 = new NetResponseHandler<Message>();
 		netReq = new NetRequests();
+		
 		chatList = new ChatList();
 		nick = bundle.getString("nick");
 		input = (EditText) findViewById(R.id.userInput);
@@ -156,8 +157,8 @@ public class ChatActivity extends Activity {
 	public class SendThread extends Thread {
 		@Override
 		public void run() {
-			EditText message = (EditText) findViewById(R.id.userInput);
-			Message msg = new Message(nick, message.getText().toString());
+			EditText input = (EditText) findViewById(R.id.userInput);
+			Message msg = new Message(nick, input.getText().toString());
 			netReq.chatPOST(msg, handler2);
 		}
 	}
