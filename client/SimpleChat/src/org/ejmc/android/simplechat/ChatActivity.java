@@ -1,24 +1,19 @@
 package org.ejmc.android.simplechat;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.LogRecord;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.protocol.BasicHttpContext;
 import org.ejmc.android.simplechat.model.ChatList;
+import org.ejmc.android.simplechat.model.Message;
 import org.ejmc.android.simplechat.net.NetRequests;
 import org.ejmc.android.simplechat.net.NetResponseHandler;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -26,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 /**
  * Chat activity.
@@ -37,12 +31,31 @@ public class ChatActivity extends Activity {
 
 	private EditText input;
 	private UpdatesThread updates;
+	private NetRequests netReq;
+	private ChatList chatList;
+	private EditText conversation;
+	private NetResponseHandler<ChatList> handler;
+	private Handler puente = new Handler() {
+		@Override
+		public void handleMessage(android.os.Message msg) {
+			try {
+				conversation.setText((String) msg.obj);
+			} catch (Exception e) {
+				Log.e("Exception", e.getMessage());
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
 		Bundle bundle = getIntent().getExtras();
+
+		handler = new NetResponseHandler<ChatList>();
+		netReq = new NetRequests();
+		chatList = new ChatList();
+		conversation = (EditText) findViewById(R.id.conversationField);
 
 		input = (EditText) findViewById(R.id.userInput);
 		input.setHint(bundle.getString("nick"));
@@ -96,16 +109,24 @@ public class ChatActivity extends Activity {
 	public class UpdatesThread extends Thread {
 		Timer timer;
 
+		@Override
 		public void run() {
 			timer = new Timer();
-			timer.scheduleAtFixedRate(timerTask, 0, 1000);
+			timer.scheduleAtFixedRate(timerTask, 0, 500);
 		}
 
 		TimerTask timerTask = new TimerTask() {
 			public void run() {
-				Log.e("", "------------");
-				NetRequests netReq = new NetRequests();
-				netReq.chatGET(0, new NetResponseHandler<ChatList>());
+				netReq.chatGET(0, handler);
+				chatList = handler.getChatList();
+				List<Message> messages = chatList.getMessages();
+				String text = "";
+				for (int i = 0; i < messages.size(); i++) {
+					text += messages.get(i).toString() + "\n";
+				}
+				android.os.Message msg = new android.os.Message();
+				msg.obj = text;
+				puente.sendMessage(msg);
 			}
 		};
 
@@ -115,4 +136,11 @@ public class ChatActivity extends Activity {
 
 	}
 
+	public void reloadWindow(String text) {
+		try {
+			conversation.setText(text);
+		} catch (Exception e) {
+			Log.e("Exception", e.getMessage());
+		}
+	}
 }

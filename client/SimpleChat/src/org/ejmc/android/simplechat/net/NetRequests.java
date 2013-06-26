@@ -37,11 +37,17 @@ public class NetRequests {
 		try {
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpGet httpget = new HttpGet(
-					"http://172.20.0.9/chat-kata/api/chat?seq=0");
+					"http://172.20.0.9/chat-kata/api/chat?seq=" + seq);
 			HttpResponse response = httpclient.execute(httpget);
-			
+
+			InputStreamReader in = new InputStreamReader(response.getEntity()
+					.getContent());
+			BufferedReader rd = new BufferedReader(in);
+
+			handler.getChatList().getMessages().add(new Message("dario", "prueba"));
+
 		} catch (Exception e) {
-			Log.e("demo", e.getMessage());
+			Log.e("Exception", e.getMessage());
 		}
 	}
 

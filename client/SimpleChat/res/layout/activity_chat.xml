@@ -31,18 +31,18 @@
             android:layout_gravity="left|center_vertical"
             android:text="Chat-Kata Room"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-
     </FrameLayout>
 
     <EditText
-        android:id="@+id/ipFiel"
-        android:layout_width="324dp"
-        android:layout_height="234dp"
-        android:layout_weight="0.39"
+        android:id="@+id/conversationField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.81"
         android:ems="10"
-        android:gravity="center_vertical|start|top"
+        android:gravity="center_vertical|top"
         android:inputType="textMultiLine"
-        android:scrollbarStyle="insideOverlay"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:scrollbarStyle="insideInset"
         android:scrollbars="vertical" >
 
         <requestFocus />

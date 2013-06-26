@@ -1,6 +1,14 @@
 package org.ejmc.android.simplechat.net;
 
+
+import java.util.logging.LogRecord;
+
+import org.ejmc.android.simplechat.model.ChatList;
+import org.ejmc.android.simplechat.model.Message;
 import org.ejmc.android.simplechat.model.RequestError;
+
+import android.os.Handler;
+
 
 /**
  * Empty response handler.
@@ -11,7 +19,22 @@ import org.ejmc.android.simplechat.model.RequestError;
  * 
  * @param <Response>
  */
-public class NetResponseHandler<Response> {
+public class NetResponseHandler<Response> extends Handler{
+
+	private ChatList chatList;
+	
+	public NetResponseHandler(){
+		chatList = new ChatList();
+	}
+	
+	
+	public ChatList getChatList() {
+		return chatList;
+	}
+
+	public void setChatList(ChatList chatList) {
+		this.chatList = chatList;
+	}
 
 	/**
 	 * Handles a successful request
@@ -32,5 +55,11 @@ public class NetResponseHandler<Response> {
 	 */
 	public void onRequestError(RequestError error) {
 
+	}
+
+
+	public void handleMessage(String msg) {
+		// TODO Auto-generated method stub
+		
 	}
 }
