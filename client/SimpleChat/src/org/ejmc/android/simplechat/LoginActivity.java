@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Main activity.
@@ -27,17 +29,8 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
 		btnJoin = (Button) findViewById(R.id.btnJoin);
 		nick = (TextView) findViewById(R.id.nickField);
-		ipServer = (TextView) findViewById(R.id.ipField);
-
-		/*SharedPreferences settings = getSharedPreferences("perfil",
-				MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("nick", nick.getText().toString());
-		editor.commit();*/
-
 	}
 
 	@Override
@@ -48,10 +41,15 @@ public class LoginActivity extends Activity {
 	}
 
 	public void join(View v) {
-		Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
-		intent.putExtra("nick", nick.getText().toString());
-		intent.putExtra("ipServer", ipServer.getText().toString());
-		startActivity(intent);
+		String nickname = nick.getText().toString();
+		if (nickname.equals("")) {
+			Toast toast = Toast.makeText(this, "Nick incorrecto", 1000);
+			toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 100);
+			toast.show();
+		} else {
+			Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+			intent.putExtra("nick", nickname);
+			startActivity(intent);
+		}
 	}
-
 }

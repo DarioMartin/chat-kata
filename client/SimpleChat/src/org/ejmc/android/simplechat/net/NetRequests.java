@@ -33,39 +33,50 @@ import android.util.Log;
  */
 public class NetRequests  {
 
-	/**
-	 * Gets chat messages from sequence number.
-	 * 
-	 * @param seq
-	 * @param handler
-	 */
 
 	public void chatGET(int seq, NetResponseHandler<ChatList> handler) {
 
 		try {
 			String url = "http://172.20.0.9/chat-kata/api/chat?seq=" + seq;
-
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpGet httpget = new HttpGet(url);
 			HttpResponse response;
 			response = httpclient.execute(httpget);
 
 			if (response.getStatusLine().getStatusCode() == 200) {
-
 				HttpEntity entity = response.getEntity();
 				InputStream instream = entity.getContent();
 				String result = convertStreamToString(instream);
 				instream.close();
-
 				handler.onSuccess(getChatList(result));
-
 			}
 
 		} catch (Exception e) {
 			Log.e("Exception: ", e.toString());
-
 		}
+	}
+	
+	public void chatPOST(Message message, NetResponseHandler<Message> handler) {
 
+		try {
+			String url = "http://172.20.0.9/chat-kata/api/chat";
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("message", message.getMessage());
+			jsonObj.put("nick", message.getNick());
+			HttpPost httppost = new HttpPost(url);
+			StringEntity se = new StringEntity(jsonObj.toString());
+		    httppost.setEntity(se);
+			httppost.setHeader("Content-type", "text/json");
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpResponse response = httpclient.execute(httppost);
+
+			if (response.getStatusLine().getStatusCode() != 201) {
+				//controlar errores
+			}
+
+		} catch (Exception e) {
+			Log.e("Exception: ", e.toString());
+		}
 	}
 
 	private static String convertStreamToString(InputStream is) {
@@ -117,34 +128,7 @@ public class NetRequests  {
 		return listaMensajes;
 	}
 
-	/**
-	 * POST message to chat.
-	 * 
-	 * @param message
-	 * @param handler
-	 */
-	public void chatPOST(Message message, NetResponseHandler<Message> handler) {
-
-		try {
-			String url = "http://172.20.0.9/chat-kata/api/chat";
-			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("message", message.getMessage());
-			jsonObj.put("nick", message.getNick());
-			HttpPost httppost = new HttpPost(url);
-			StringEntity se = new StringEntity(jsonObj.toString());
-		    httppost.setEntity(se);
-			httppost.setHeader("Content-type", "text/json");
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpResponse response = httpclient.execute(httppost);
-
-			if (response.getStatusLine().getStatusCode() != 201) {
-				//controlar errores
-			}
-
-		} catch (Exception e) {
-			Log.e("Exception: ", e.toString());
-		}
-	}
+	
 
 
 }
