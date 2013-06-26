@@ -40,7 +40,7 @@ public class NetResponseHandler<Response> extends Handler{
 	 * Handles a successful request
 	 * */
 	public void onSuccess(Response response) {
-
+		chatList=(ChatList)response;
 	}
 
 	/**

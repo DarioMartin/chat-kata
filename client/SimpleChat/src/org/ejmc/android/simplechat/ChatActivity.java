@@ -122,7 +122,7 @@ public class ChatActivity extends Activity {
 				List<Message> messages = chatList.getMessages();
 				String text = "";
 				for (int i = 0; i < messages.size(); i++) {
-					text += messages.get(i).toString() + "\n";
+					text += messages.get(i)+"\n";
 				}
 				android.os.Message msg = new android.os.Message();
 				msg.obj = text;
@@ -134,13 +134,5 @@ public class ChatActivity extends Activity {
 			timer.cancel();
 		}
 
-	}
-
-	public void reloadWindow(String text) {
-		try {
-			conversation.setText(text);
-		} catch (Exception e) {
-			Log.e("Exception", e.getMessage());
-		}
 	}
 }

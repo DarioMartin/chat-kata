@@ -33,5 +33,9 @@ public class ChatList {
 	public void setSeq(int seq) {
 		this.seq = seq;
 	}
+
+	public void addMessage(Message auxMessage) {
+		messages.add(auxMessage);		
+	}
 	
 }
