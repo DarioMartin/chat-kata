@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 /**
  * Chat activity.
@@ -35,6 +36,8 @@ public class ChatActivity extends Activity {
 	private ChatList chatList;
 	private EditText conversation;
 	private NetResponseHandler<ChatList> handler;
+	private NetResponseHandler<Message> handler2;
+	private String nick;
 	private Handler puente = new Handler() {
 		@Override
 		public void handleMessage(android.os.Message msg) {
@@ -53,12 +56,13 @@ public class ChatActivity extends Activity {
 		Bundle bundle = getIntent().getExtras();
 
 		handler = new NetResponseHandler<ChatList>();
+		handler2 = new NetResponseHandler<Message>();
 		netReq = new NetRequests();
 		chatList = new ChatList();
 		conversation = (EditText) findViewById(R.id.conversationField);
-
+		nick = bundle.getString("nick");
 		input = (EditText) findViewById(R.id.userInput);
-		input.setHint(bundle.getString("nick"));
+		input.setHint(nick);
 
 		updates = new UpdatesThread();
 		updates.start();
@@ -102,8 +106,11 @@ public class ChatActivity extends Activity {
 		startActivity(intent);
 	}
 
-	public void send() {
-
+	public void send(View w) {
+		SendThread thread = new SendThread();
+		thread.start();
+		EditText message = (EditText) findViewById(R.id.userInput);
+		message.setText("");
 	}
 
 	public class UpdatesThread extends Thread {
@@ -112,17 +119,17 @@ public class ChatActivity extends Activity {
 		@Override
 		public void run() {
 			timer = new Timer();
-			timer.scheduleAtFixedRate(timerTask, 0, 500);
+			timer.scheduleAtFixedRate(timerTask, 0, 5000);
 		}
 
 		TimerTask timerTask = new TimerTask() {
 			public void run() {
-				netReq.chatGET(0, handler);
+				netReq.chatGET(handler.getChatList().getSeq(), handler);
 				chatList = handler.getChatList();
 				List<Message> messages = chatList.getMessages();
 				String text = "";
 				for (int i = 0; i < messages.size(); i++) {
-					text += messages.get(i)+"\n";
+					text += messages.get(i) + "\n";
 				}
 				android.os.Message msg = new android.os.Message();
 				msg.obj = text;
@@ -133,6 +140,14 @@ public class ChatActivity extends Activity {
 		public void stopTimer() {
 			timer.cancel();
 		}
-
+	}
+	
+	public class SendThread extends Thread {
+		@Override
+		public void run() {
+			EditText message = (EditText) findViewById(R.id.userInput);
+			Message msg = new Message(nick, message.getText().toString());
+			netReq.chatPOST(msg, handler2);
+		}
 	}
 }

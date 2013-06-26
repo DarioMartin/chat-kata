@@ -10,8 +10,11 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HTTP;
 import org.ejmc.android.simplechat.model.ChatList;
 import org.ejmc.android.simplechat.model.Message;
 import org.json.JSONArray;
@@ -28,7 +31,7 @@ import android.util.Log;
  * @author startic
  * 
  */
-public class NetRequests extends AsyncTask<Void, Void, String> {
+public class NetRequests  {
 
 	/**
 	 * Gets chat messages from sequence number.
@@ -39,25 +42,20 @@ public class NetRequests extends AsyncTask<Void, Void, String> {
 
 	public void chatGET(int seq, NetResponseHandler<ChatList> handler) {
 
-		String url = "http://172.20.0.9/chat-kata/api/chat?seq=" + seq;
-
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(url);
-		HttpResponse response;
-
 		try {
+			String url = "http://172.20.0.9/chat-kata/api/chat?seq=" + seq;
 
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpGet httpget = new HttpGet(url);
+			HttpResponse response;
 			response = httpclient.execute(httpget);
 
-			if (response.getStatusLine().getStatusCode()==200){
-				
+			if (response.getStatusLine().getStatusCode() == 200) {
+
 				HttpEntity entity = response.getEntity();
 				InputStream instream = entity.getContent();
 				String result = convertStreamToString(instream);
 				instream.close();
-				
-				ChatList chatlist= getChatList(result);
-				chatlist.setSeq(getSeq(result));
 
 				handler.onSuccess(getChatList(result));
 
@@ -113,12 +111,10 @@ public class NetRequests extends AsyncTask<Void, Void, String> {
 			listaMensajes.addMessage(auxMessage);
 		}
 
-		return listaMensajes;
-	}
+		listaMensajes
+				.setSeq(Integer.parseInt(jsonObject.getString("last_seq")));
 
-	private static int getSeq(String result) throws JSONException {
-		JSONObject jsonObject = new JSONObject(result);
-		return Integer.parseInt(jsonObject.getString("last_seq"));
+		return listaMensajes;
 	}
 
 	/**
@@ -129,12 +125,26 @@ public class NetRequests extends AsyncTask<Void, Void, String> {
 	 */
 	public void chatPOST(Message message, NetResponseHandler<Message> handler) {
 
+		try {
+			String url = "http://172.20.0.9/chat-kata/api/chat";
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("message", message.getMessage());
+			jsonObj.put("nick", message.getNick());
+			HttpPost httppost = new HttpPost(url);
+			StringEntity se = new StringEntity(jsonObj.toString());
+		    httppost.setEntity(se);
+			httppost.setHeader("Content-type", "text/json");
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpResponse response = httpclient.execute(httppost);
+
+			if (response.getStatusLine().getStatusCode() != 201) {
+				//controlar errores
+			}
+
+		} catch (Exception e) {
+			Log.e("Exception: ", e.toString());
+		}
 	}
 
-	@Override
-	protected String doInBackground(Void... params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

@@ -32,7 +32,12 @@ public class Message {
 		this.message = message;
 	}
 
-	@Override public String toString() {
-	   return nick+": "+message;
+	public String toString2() {
+	   return "{\"nick\":\""+nick+"\", \"message\":\""+message+"\"}";
 	 }
+
+	@Override
+	public String toString() {
+		return nick+": "+message;
+	}
 }
